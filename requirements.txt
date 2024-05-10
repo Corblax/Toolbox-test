@@ -1,0 +1,4 @@
+scapy
+reportlab
+netifaces
+requests
