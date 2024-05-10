@@ -268,7 +268,7 @@ def main():
             exploit_apache()
         elif choice == '7':
             delete_all_files() 
-            print "(Attention au sudo...)Merci d'avoir utilisé l'outil de test de pentest. À bientôt!")
+            print "(Attention au sudo...)Merci d'avoir utilisé l'outil de test de pentest. À bientôt!"
             break
         else:
             print("Choix invalide. Veuillez entrer un numéro valide.")
