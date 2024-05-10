@@ -12,3 +12,4 @@ RUN apt-get update && \
 ADD httpd.conf /conf/httpd.conf
 
 CMD ["httpd", "-D", "FOREGROUND"]
+                                     
